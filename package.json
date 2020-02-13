@@ -1,5 +1,6 @@
 {
   "name": "todos",
+  "homepage": "https://creativeAndy.gitlab.io/todo-part1",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

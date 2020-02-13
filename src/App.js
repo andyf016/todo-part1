@@ -6,6 +6,45 @@ class App extends Component {
   state = {
     todos: todosList
   };
+
+  handleToggleComplete = (event, todoIdToToggle) => {
+   const newTodos = this.state.todos.slice()
+   const newnewTodos = newTodos.map(todo=>{
+     if(todo.id === todoIdToToggle){
+       todo.completed = !todo.completed
+     }
+    
+    return todo
+   })
+   this.setState({todos: newnewTodos })
+  }
+
+  handleAddTodo = event => {
+    
+    if(event.key === "Enter"){
+     // hot to create a new todo
+      const newTodo = {
+        userId: 1,
+        id: Math.floor(Math.random() * 10000),
+        title: event.target.value,
+        completed: false
+      }
+ 
+      
+     //update component state to reflect new todo
+
+     //create a copy of the data that you want to update 
+     const newTodos = this.state.todos.slice()
+     //modify the copy
+     newTodos.push(newTodo) 
+     //overwrite the original with the copy
+     //this.setState tells reacct that we need to do a re-render
+     
+     this.setState({todos: newTodos})
+     event.target.value = ""
+    }
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -14,10 +53,13 @@ class App extends Component {
           <input
             className="new-todo"
             placeholder="What needs to be done?"
-            autofocus
+            onKeyDown = {this.handleAddTodo}
+            autoFocus
           />
         </header>
-        <TodoList todos={this.state.todos} />
+        <TodoList 
+        todos={this.state.todos} 
+        handleToggleComplete = {this.handleToggleComplete} />
         <footer className="footer">
           <span className="todo-count">
             <strong>0</strong> item(s) left
@@ -28,7 +70,7 @@ class App extends Component {
     );
   }
 }
-
+//this.props.handleToggleComplete
 class TodoItem extends Component {
   render() {
     return (
@@ -38,6 +80,7 @@ class TodoItem extends Component {
             className="toggle"
             type="checkbox"
             checked={this.props.completed}
+            onChange={this.props.handleToggleComplete}
           />
           <label>{this.props.title}</label>
           <button className="destroy" />
@@ -53,7 +96,12 @@ class TodoList extends Component {
       <section className="main">
         <ul className="todo-list">
           {this.props.todos.map(todo => (
-            <TodoItem title={todo.title} completed={todo.completed} />
+            <TodoItem 
+            key = {todo.id}
+            title={todo.title} 
+            completed={todo.completed} 
+           // id = {todo.id}
+            handleToggleComplete = {event => this.props.handleToggleComplete(event, todo.id)} />
           ))}
         </ul>
       </section>
